@@ -14,18 +14,18 @@ from sklearn.metrics import confusion_matrix, classification_report
 from sklearn.metrics import confusion_matrix, classification_report
 
 # ==== USER PATHS (update these) ====
-RETFOUND_ROOT = r"C:\Users\reem2\Downloads\train_eye\RETFound"  # folder containing models_vit.py, util/, etc.
-WEIGHTS_PATH = r"C:\Users\reem2\Downloads\train_eye\RETFound_cfp_weights.pth"
-DATA_DIR = r"C:\Users\reem2\Downloads\train_eye\data"  # must contain class subfolders Normal/Hypertension
-HYPERTENSIVE_IMAGES=r"C:\Users\reem2\Downloads\train_eye\data\Hypertension"  # e.g. r"C:\path\to\data_root\Hypertension"
-NORMAL_IMAGES=r"C:\Users\reem2\Downloads\train_eye\data\Normal" # e.g. r"C:\path\to\data_root\Normal"
+RETFOUND_ROOT = r"C:\*******\******\Downloads\train_eye\RETFound"  # folder containing model
+WEIGHTS_PATH = r"C:\***\******\Downloads\train_eye\RETFound_cfp_weights.pth"
+DATA_DIR = r"C:\*****\Downloads\train_eye\data"  #  contain classes Normal/Hypertension
+HYPERTENSIVE_IMAGES=r"C:\******\Downloads\train_eye\data\Hypertension" 
+NORMAL_IMAGES=r"C:\*****8\******\Downloads\train_eye\data\Normal" 
 
 # Make RETFound imports available
 if RETFOUND_ROOT not in sys.path:
     sys.path.append(RETFOUND_ROOT)
 
-from util.pos_embed import interpolate_pos_embed  # noqa: E402
-import models_vit  # noqa: E402
+from util.pos_embed import interpolate_pos_embed  
+import models_vit  
 
 
 def show_samples(folder: Optional[str], limit: int = 5) -> None:
@@ -111,7 +111,7 @@ def train(model, train_loader, val_loader, device, epochs: int = 5, base_lr: flo
     )
 
     for epoch in range(epochs):
-        # ---- TRAIN ----
+    
         model.train()
         train_loss = 0.0
         train_correct = 0
@@ -135,7 +135,7 @@ def train(model, train_loader, val_loader, device, epochs: int = 5, base_lr: flo
         epoch_train_loss = train_loss / max(train_total, 1)
         epoch_train_acc = train_correct / max(train_total, 1)
 
-        # ---- VALIDATION ----
+
         model.eval()
         val_loss = 0.0
         val_correct = 0
@@ -168,7 +168,6 @@ def main():
     device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
     print("Device:", device)
 
-    # Optional preview (remove if not needed)
     show_samples(HYPERTENSIVE_IMAGES)
     show_samples(NORMAL_IMAGES)
 
