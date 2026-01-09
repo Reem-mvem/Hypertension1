@@ -12,9 +12,9 @@ from PIL import Image
 from timm.models.layers import trunc_normal_
 from torchvision import transforms
 
-# ==== USER PATHS (update these if your layout differs) ====
-RETFOUND_ROOT = r"C:\Users\reem2\Downloads\train_eye\RETFound"
-UPSTREAM_WEIGHTS_PATH = r"C:\Users\reem2\Downloads\train_eye\RETFound_cfp_weights.pth"
+# 
+RETFOUND_ROOT = r"C:\****\*****\Downloads\train_eye\RETFound"
+UPSTREAM_WEIGHTS_PATH = r"C:\*****\******\Downloads\train_eye\RETFound_cfp_weights.pth"
 WEIGHTS_PATH = r"best.pth"
 
 # Make RETFound imports available
@@ -22,11 +22,11 @@ if RETFOUND_ROOT not in sys.path:
     sys.path.append(RETFOUND_ROOT)
 
 from util.pos_embed import interpolate_pos_embed  # noqa: E402
-import models_vit  # noqa: E402
+import models_vit  #
 
 app = FastAPI(title="Hypertension Classification API")
 
-# Allow local dev frontends (Vite/React) to call this API
+# Allow local dev frontends to call this API
 app.add_middleware(
     CORSMiddleware,
     allow_origins=[
@@ -62,7 +62,7 @@ def _build_model(num_classes: int, device: torch.device) -> torch.nn.Module:
     model.head = torch.nn.Linear(in_features, num_classes)
     trunc_normal_(model.head.weight, std=2e-5)
 
-    # Load fine-tuned weights if available
+    # Load fine-tuned weights
     if os.path.isfile(WEIGHTS_PATH):
         state_dict = torch.load(WEIGHTS_PATH, map_location="cpu")
         model.load_state_dict(state_dict, strict=False)
@@ -84,7 +84,7 @@ def _build_transform():
 
 device = torch.device("cuda" if torch.cuda.is_available() else "cpu")
 transform = _build_transform()
-# Assumes training used ImageFolder with classes sorted alphabetically
+
 CLASSES: List[str] = ["Hypertension", "Normal"]
 model = _build_model(num_classes=len(CLASSES), device=device)
 
@@ -102,7 +102,7 @@ def predict(file: UploadFile = File(...)):
     try:
         image_bytes = file.file.read()
         pil_image = Image.open(io.BytesIO(image_bytes)).convert("RGB")
-    except Exception as exc:  # pragma: no cover - defensive
+    except Exception as exc:  
         raise HTTPException(status_code=400, detail="Invalid image") from exc
 
     tensor = transform(pil_image).unsqueeze(0).to(device)
@@ -119,4 +119,5 @@ def predict(file: UploadFile = File(...)):
             cls: round(probs[i].item(), 4) for i, cls in enumerate(CLASSES)
         },
     }
+
 
